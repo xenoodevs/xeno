@@ -1,4 +1,4 @@
-# Xeno Executor - Download #1 Execution Tool for PC & Mobile
+# Xeno Executor - Download #1 FREE Execution Tool for PC & Mobile
 
 ![User Rating](https://img.shields.io/badge/User%20Rating-4.71-blueviolet?style=flat&logo=star) ![Downloads](https://img.shields.io/badge/Downloads-623K-orange?style=flat&logo=github) ![License](https://img.shields.io/badge/License-MIT-cyan?style=flat) ![Latest Version](https://img.shields.io/badge/Latest%20Version-4.7.3-magenta?style=flat&logo=github)
 
